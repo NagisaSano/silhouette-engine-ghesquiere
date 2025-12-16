@@ -165,7 +165,7 @@ function describeVariant(params, index) {
 
 
 function labelFor(group, value) {
-    return labelMap[group]?.[value] ?? value;
+    return labelMap[group] .[value]  value;
 }
 
 
@@ -404,7 +404,7 @@ function createStatsChart(stats) {
 
 
 
-    const previousChart = window.statsChart ?? Chart.getChart?.(canvas);
+    const previousChart = window.statsChart  Chart.getChart .(canvas);
 
     if (previousChart && typeof previousChart.destroy === 'function') {
 
@@ -488,10 +488,10 @@ function updateInfo(baseParams, variations, stats) {
 
 
     const variationPreview = variations.length
-        ? `Variations générées : ${variations
+         `Variations générées : ${variations
             .slice(0, 3)
             .map((v, idx) => describeVariant(v, idx + 1))
-            .join(' · ')}${variations.length > 3 ? ' …' : ''}`
+            .join(' · ')}${variations.length > 3  ' …' : ''}`
         : 'Aucune silhouette valide n’a été générée pour ces paramètres.';
 
 
@@ -583,7 +583,7 @@ function exportPDF() {
     pdf.save('Silhouette_Engine_Ghesquiere_Lookbook.pdf');
 }
 
-// Dessin de silhouette inspirÃ© des rÃ©glages GhesquiÃ¨re
+// Dessin de silhouette inspiré des réglages Ghesquière
 
 function drawSilhouette(canvas, params, variation) {
 
@@ -655,11 +655,11 @@ function drawSilhouette(canvas, params, variation) {
 
     const shoulderWidth = shoulderRule.w + (colRule.expand || 0);
 
-    const shoulderHeight = shoulderRule.h + (colRule.expand ? 8 : 0);
+    const shoulderHeight = shoulderRule.h + (colRule.expand  8 : 0);
 
     const topY = 108 + (colRule.y || 0);
 
-    ctx.fillStyle = variation % 3 === 0 ? '#1a1a2e' : variation % 3 === 1 ? '#0f3460' : '#2a1a4a';
+    ctx.fillStyle = variation % 3 === 0  '#1a1a2e' : variation % 3 === 1  '#0f3460' : '#2a1a4a';
 
 
 
@@ -739,13 +739,13 @@ function drawSilhouette(canvas, params, variation) {
 
     const len = rules.length[params.length];
 
-    const asymDrop = params.col === 'asym' ? (colRule.drop || 0) : 0;
+    const asymDrop = params.col === 'asym'  (colRule.drop || 0) : 0;
 
-    const leftDrop = params.col === 'asym' ? -asymDrop : 0;
+    const leftDrop = params.col === 'asym'  -asymDrop : 0;
 
-    const rightLift = params.col === 'asym' ? asymDrop : 0;
+    const rightLift = params.col === 'asym'  asymDrop : 0;
 
-    ctx.fillStyle = variation % 4 === 0 ? '#4a2a6a' : '#3a1a5a';
+    ctx.fillStyle = variation % 4 === 0  '#4a2a6a' : '#3a1a5a';
 
     ctx.beginPath();
 
@@ -828,7 +828,7 @@ function drawSilhouette(canvas, params, variation) {
         const startY = topY + shoulderHeight * 0.6;
 
         const sleeveHeight = params.sleeve === 'short'
-            ? baseSleeve.h
+             baseSleeve.h
             : Math.max(baseSleeve.h, len * 0.55);
 
         const sleeveWidth = baseSleeve.w;
