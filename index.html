@@ -105,13 +105,167 @@
     </div>
 
     <script>
-        // On va coder ça à l'étape 2
-        function generateSilhouettes() {
-            alert('🚀 ÉTAPE 1 TERMINÉE ! Clique OK pour passer à la logique JS');
+    // =============================================================================
+    // SILHOUETTE ENGINE - LOGIQUE G H E S Q U I È R E
+    // =============================================================================
+
+    const rules = {
+        shoulder: { sharp: { w: 80, h: 20 }, volume: { w: 120, h: 40 }, fluid: { w: 90, h: 25 } },
+        col: { asym: { x: 20, y: 10 }, vneck: { x: 40, y: 30 }, oversize: { x: 0, y: 0 } },
+        waist: { high: { y: 120 }, low: { y: 160 }, marked: { y: 140, curve: 15 } },
+        length: { mini: 250, midi: 380, maxi: 500 },
+        sleeve: { none: [], short: [{x:50,y:120,w:30,h:40}], long: [{x:45,y:120,w:25,h:100}] }
+    };
+
+    function generateSilhouettes() {
+        const container = document.getElementById('canvasContainer');
+        const params = {
+            shoulder: document.getElementById('shoulder').value,
+            col: document.getElementById('col').value,
+            waist: document.getElementById('waist').value,
+            length: document.getElementById('length').value,
+            sleeve: document.getElementById('sleeve').value
+        };
+        
+        container.innerHTML = ''; // Clear
+        for(let i = 0; i < 10; i++) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 300; canvas.height = 600;
+            canvas.className = 'silhouette-canvas';
+            drawSilhouette(canvas, params, i);
+            container.appendChild(canvas);
         }
-        function exportPDF() {
-            alert('📄 PDF prêt dans l\'étape suivante !');
+        
+        document.getElementById('silhouetteInfo').style.display = 'block';
+        updateInfo(params);
+    }
+
+    function drawSilhouette(canvas, params, variation) {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width, h = canvas.height;
+        
+        // Fond gradient Ghesquière
+        const gradient = ctx.createLinearGradient(0, 0, 0, h);
+        gradient.addColorStop(0, 'rgba(10,10,20,0.9)');
+        gradient.addColorStop(1, 'rgba(50,20,80,0.9)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, w, h);
+        
+        // Tête
+        ctx.fillStyle = '#f0d4b3';
+        ctx.beginPath();
+        ctx.arc(w/2, 60, 35, 0, Math.PI*2);
+        ctx.fill();
+        
+        // Cou
+        ctx.fillStyle = '#e8c4a0';
+        ctx.fillRect(w/2-12, 95, 24, 25);
+        
+        // CORPS - Application règles Ghesquière
+        const shoulder = rules.shoulder[params.shoulder];
+        const col = rules.col[params.col];
+        const waist = rules.waist[params.waist];
+        const len = rules.length[params.length];
+        
+        // Épaules (CLÉ Ghesquière)
+        ctx.fillStyle = variation % 2 ? '#1a1a2e' : '#0f3460'; // Alt couleurs
+        ctx.beginPath();
+        ctx.moveTo(w/2 - shoulder.w/2 - col.x, 120 + col.y);
+        ctx.lineTo(w/2 + shoulder.w/2 - col.x, 120 + col.y);
+        ctx.lineTo(w/2 + shoulder.w/2 + 20, 140);
+        ctx.lineTo(w/2 - shoulder.w/2 - 20, 140);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Buste
+        ctx.beginPath();
+        ctx.moveTo(w/2 - 60, 140);
+        ctx.lineTo(w/2 + 60, 140);
+        ctx.lineTo(w/2 + 50, waist.y);
+        ctx.lineTo(w/2 - 50, waist.y);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Taille marquée
+        if(waist.curve) {
+            ctx.strokeStyle = '#ffd700';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(w/2, waist.y + 10, waist.curve, 0, Math.PI);
+            ctx.stroke();
         }
+        
+        // Jupe/Robe
+        ctx.fillStyle = variation % 3 ? '#2a1a4a' : '#4a2a6a';
+        ctx.beginPath();
+        ctx.moveTo(w/2 - 70, waist.y);
+        ctx.lineTo(w/2 + 70, waist.y);
+        ctx.lineTo(w/2 + 60 + (variation*2), waist.y + len);
+        ctx.lineTo(w/2 - 60 - (variation*2), waist.y + len);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Manches
+        rules.sleeve[params.sleeve].forEach(sleeve => {
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(sleeve.x, sleeve.y, sleeve.w, sleeve.h);
+        });
+        
+        // Asymétrie Ghesquière (détail pro)
+        if(params.col === 'asym') {
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(w-40, h-100, 25, 80);
+        }
+        
+        // Bordure luxe
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(10, 10, w-20, h-20);
+        
+        // Numéro
+        ctx.fillStyle = '#ffd700';
+        ctx.font = 'bold 24px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`#${variation+1}`, w/2, h-20);
+    }
+
+    function updateInfo(params) {
+        document.getElementById('silhouetteInfo').innerHTML = `
+            <h3>🎯 Configuration Active</h3>
+            <p><strong>Épaules:</strong> ${params.shoulder.toUpperCase()}</p>
+            <p><strong>Col:</strong> ${params.col.toUpperCase()}</p>
+            <p><strong>Taille:</strong> ${params.waist.toUpperCase()}</p>
+            <p><strong>Longueur:</strong> ${params.length.toUpperCase()}</p>
+            <p><strong>Manches:</strong> ${params.sleeve.toUpperCase()}</p>
+            <p style="margin-top:20px;font-style:italic;">
+                ${getStyleDescription(params)}
+            </p>
+        `;
+    }
+
+    function getStyleDescription(params) {
+        const desc = {
+            shoulder: { sharp: 'Tension structurelle', volume: 'Volume architectural', fluid: 'Drapé organique' },
+            col: { asym: 'Asymétrie audacieuse', vneck: 'Ligne épurée', oversize: 'Enveloppement total' }
+        };
+        return `${desc.shoulder[params.shoulder]} + ${desc.col[params.col]} • Signature Ghesquière`;
+    }
+
+    function exportPDF() {
+        const element = document.getElementById('canvasContainer');
+        html2pdf().set({
+            margin: 1,
+            filename: 'Silhouette_Engine_Ghesquiere_Lookbook.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+        }).from(element).save();
+    }
+
+    // =============================================================================
+    // INIT - Prêt à l'emploi
+    // =============================================================================
+    console.log('🎨 Silhouette Engine v1.0 - Ghesquière Mode ACTIVÉ');
     </script>
 </body>
 </html>
