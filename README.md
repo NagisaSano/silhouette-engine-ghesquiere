@@ -150,7 +150,7 @@ Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## 📬 Contact
 
-**Nagisa Sano** — Créateur du projet  
+**Killian Dujardin** — Créateur du projet  
 GitHub : [@NagisaSano](https://github.com/NagisaSano)
 
 ---
