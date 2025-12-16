@@ -3,15 +3,20 @@
 Générateur de silhouettes conceptuelles inspirées du style Nicolas Ghesquière (Louis Vuitton).
 
 ## Fonctionnalités
-- 100+ combinaisons cohérentes (épaules, cols, tailles, longueurs, manches) avec règles anti-nonsense.
+- 100+ combinaisons cohérentes (épaules, cols, tailles, longueurs, manches) avec règles anti-nonsense, génération forcée à 10 variantes valides.
 - Visualisation des stats (valides/rejetées/tentatives) via Chart.js.
 - Export du lookbook en PDF avec html2pdf.
 - Direction artistique luxe (noir/or, typo serif Crimson Text).
+- Dépendances CDN épinglées (Chart.js 4.4.1, html2pdf 0.10.1) avec SRI.
 
 ## Démarrer
 1) Ouvrir `index.html` dans un navigateur moderne.  
 2) Choisir les paramètres (épaules, col, taille, longueur, manches).  
 3) Cliquer sur « Générer 10 variantes », puis exporter le lookbook si besoin.
+
+## Lint
+- Installer les dépendances dev : `npm install`.
+- Lancer la vérification : `npm run lint`.
 
 ## Structure
 - `index.html` : structure HTML + liens CDN (Chart.js, html2pdf).  

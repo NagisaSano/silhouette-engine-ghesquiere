@@ -92,17 +92,81 @@ function generateSilhouettes() {
         canvas.width = 300;
         canvas.height = 600;
         drawSilhouette(canvas, candidate, valid);
-        canvas.title = describeVariant(candidate, valid + 1);
+        const description = describeVariant(candidate, valid + 1);
+        canvas.title = description;
+        canvas.setAttribute('role', 'img');
+        canvas.setAttribute('aria-label', description);
         container.appendChild(canvas);
 
         variations.push(candidate);
         valid++;
     }
 
+    if (valid < TARGET_SILHOUETTES) {
+        const fallback = fillWithFallbackCombos(baseParams, valid, container, variations);
+        valid += fallback.added;
+        attempts += fallback.tried;
+        rejected += fallback.rejected;
+        if (valid < TARGET_SILHOUETTES) {
+            alert(`Seulement ${valid}/${TARGET_SILHOUETTES} silhouettes valides générées (règles trop restrictives).`);
+        }
+    }
+
     const info = document.getElementById('silhouetteInfo');
     info.hidden = false;
     updateInfo(baseParams, variations, { attempts, valid, rejected });
     createStatsChart({ attempts, valid, rejected });
+}
+
+function fillWithFallbackCombos(baseParams, startIndex, container, variations) {
+    const keys = {
+        shoulder: Object.keys(rules.shoulder),
+        col: Object.keys(rules.col),
+        waist: Object.keys(rules.waist),
+        length: Object.keys(rules.length),
+        sleeve: Object.keys(rules.sleeve)
+    };
+
+    let added = 0;
+    let tried = 0;
+    let rejected = 0;
+
+    for (const shoulder of keys.shoulder) {
+        for (const col of keys.col) {
+            for (const waist of keys.waist) {
+                for (const length of keys.length) {
+                    for (const sleeve of keys.sleeve) {
+                        if (startIndex + added >= TARGET_SILHOUETTES) {
+                            return { added, tried, rejected };
+                        }
+
+                        const candidate = { shoulder, col, waist, length, sleeve };
+                        tried++;
+
+                        if (!isValidCombo(candidate)) {
+                            rejected++;
+                            continue;
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 300;
+                        canvas.height = 600;
+                        drawSilhouette(canvas, candidate, startIndex + added);
+                        const description = describeVariant(candidate, startIndex + added + 1);
+                        canvas.title = description;
+                        canvas.setAttribute('role', 'img');
+                        canvas.setAttribute('aria-label', description);
+                        container.appendChild(canvas);
+
+                        variations.push(candidate);
+                        added++;
+                    }
+                }
+            }
+        }
+    }
+
+    return { added, tried, rejected };
 }
 
 function createStatsChart(stats) {
