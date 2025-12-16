@@ -227,7 +227,7 @@ canvas:hover {
 .silhouette-info {
     background: rgba(26, 18, 48, 0.78);
     backdrop-filter: blur(26px);
-    padding: 28px;
+    padding: 24px;
     border-radius: 18px;
     border: 1px solid rgba(255, 215, 0, 0.2);
     margin-top: 24px;
@@ -248,21 +248,66 @@ canvas:hover {
 
 .silhouette-info h3 {
     color: #ffd700;
-    font-size: 2rem;
-    margin-bottom: 18px;
-    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+    text-align: left;
+    letter-spacing: 0.2px;
+}
+
+.info-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.info-sub {
+    color: rgba(248, 244, 232, 0.8);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+#configDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.silhouette-info p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0;
+    color: rgba(248, 244, 232, 0.92);
+}
+
+.silhouette-info p strong {
+    color: #ffd700;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+#configDetails > p:nth-of-type(1) {
+    margin-top: 2px;
+}
+
+#configDetails > p:nth-of-type(2) {
+    margin-top: 2px;
+    opacity: 0.95;
 }
 
 .info-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px 20px;
-    margin-bottom: 18px;
+    gap: 10px 18px;
+    margin-bottom: 14px;
 }
 
 .info-list p {
-    font-size: 1.05rem;
-    line-height: 1.6;
+    font-size: 1.08rem;
+    line-height: 1.7;
+    letter-spacing: 0.1px;
 }
 
 .use-case {
@@ -289,8 +334,8 @@ canvas:hover {
 }
 
 #statsChart {
-    max-width: 420px;
-    margin: 10px auto 0;
+    max-width: 380px;
+    margin: 0 auto;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.05);
 }
