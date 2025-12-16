@@ -546,9 +546,9 @@ function exportPDF() {
 
 
 
-    const element = document.getElementById('canvasContainer');
+    const element = document.getElementById('lookbook-wrapper');
 
-    if (!element.children.length) {
+    if (!element || !element.querySelectorAll('canvas').length) {
 
         alert('GÃ©nÃ©rez des silhouettes avant dâ€™exporter le lookbook.');
 
@@ -562,15 +562,17 @@ function exportPDF() {
 
         .set({
 
-            margin: 1,
+            margin: 10,
 
             filename: 'Silhouette_Engine_Ghesquiere_Lookbook.pdf',
 
             image: { type: 'jpeg', quality: 0.98 },
 
-            html2canvas: { scale: 2 },
+            html2canvas: { scale: 2, useCORS: true },
 
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+
+            pagebreak: { mode: ['css', 'legacy'] }
 
         })
 
