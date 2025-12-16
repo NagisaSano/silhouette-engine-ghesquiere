@@ -165,9 +165,7 @@ function describeVariant(params, index) {
 
 
 function labelFor(group, value) {
-
     return labelMap[group]?.[value] ?? value;
-
 }
 
 
@@ -830,9 +828,7 @@ function drawSilhouette(canvas, params, variation) {
         const startY = topY + shoulderHeight * 0.6;
 
         const sleeveHeight = params.sleeve === 'short'
-
             ? baseSleeve.h
-
             : Math.max(baseSleeve.h, len * 0.55);
 
         const sleeveWidth = baseSleeve.w;
