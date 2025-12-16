@@ -2,6 +2,7 @@
   "name": "silhouette-engine-ghesquiere",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "lint": "eslint . --ext .js --max-warnings=0"
   },
