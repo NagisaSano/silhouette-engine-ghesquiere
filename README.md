@@ -1,63 +1,25 @@
-# 🎨 Silhouette Engine | Ghesquière Inspired
+# Silhouette Engine | Ghesquière Inspired
 
-Générateur de silhouettes conceptuelles inspiré du style de **Nicolas Ghesquière** chez Louis Vuitton.  
-Outil d'exploration créative pour studios de mode et directeurs artistiques.
+Générateur de silhouettes conceptuelles inspirées du style Nicolas Ghesquière (Louis Vuitton).
 
-🔗 **Live demo** : https://nagisassano.github.io/silhouette-engine-ghesquiere/  
-📄 **Pitch deck** : (à ajouter quand prêt)
+## Fonctionnalités
+- 100+ combinaisons cohérentes (épaules, cols, tailles, longueurs, manches) avec règles anti-nonsense.
+- Visualisation des stats (valides/rejetées/tentatives) via Chart.js.
+- Export du lookbook en PDF avec html2pdf.
+- Direction artistique luxe (noir/or, typo serif Crimson Text).
 
----
+## Démarrer
+1) Ouvrir `index.html` dans un navigateur moderne.  
+2) Choisir les paramètres (épaules, col, taille, longueur, manches).  
+3) Cliquer sur « Générer 10 variantes », puis exporter le lookbook si besoin.
 
-## ✨ Fonctionnalités
+## Structure
+- `index.html` : structure HTML + liens CDN (Chart.js, html2pdf).  
+- `style.css` : style luxe + responsive.  
+- `silhouette.js` : logique de génération, règles, stats et export PDF.
 
-- Génération de 10+ silhouettes cohérentes à partir de paramètres :
-  - Épaules (sharp / volume / fluid)
-  - Col (asymétrique / V / oversize)
-  - Taille (haute / basse / marquée)
-  - Longueur (mini / midi / maxi)
-  - Manches (aucune / courtes / longues)
-- Règles “anti-nonsense” pour éviter les combinaisons incohérentes
-- Visualisation des silhouettes en canvas avec rendu stylisé
-- Export automatique en **Lookbook PDF**
-- Design responsive “luxe” (noir/or, effets de lumière, animations)
+## Démo
+https://NagisaSano.github.io/silhouette-engine-ghesquiere/
 
----
-
-## 🧠 Stack technique
-
-- **Front** : HTML5, CSS3 (design system luxe), JavaScript vanilla
-- **Canvas** : API 2D pour le rendu des silhouettes
-- **Charts** : Chart.js pour les stats de combinaisons
-- **PDF** : html2pdf.js pour générer un lookbook exportable
-- **Hosting** : GitHub Pages
-
----
-
-## 🚀 Lancer en local
-
-```bash
-git clone https://github.com/NagisaSano/silhouette-engine-ghesquiere.git
-cd silhouette-engine-ghesquiere
-```
-
-Ouvrir `index.html` dans le navigateur.
-
-Aucune dépendance serveur, tout tourne côté client.
-
----
-
-## 🎯 Objectif du projet
-
-- Montrer la capacité à :
-  - Structurer un outil créatif pour la mode
-  - Traduire des contraintes de direction artistique en règles logiques
-  - Concevoir une interface élégante et exploitable par un studio
-- Cible potentielle : équipes créatives / innovation de maisons de luxe.
-
----
-
-## 👤 Auteur
-
-**Killian Dujardin**  
-Étudiant en informatique (BTS CIEL) • Passionné de mode & outils créatifs  
-GitHub : https://github.com/NagisaSano
+## Contact
+Killian Dujardin | Portfolio mode/tech
