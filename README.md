@@ -11,7 +11,7 @@ Générateur de silhouettes conceptuelles inspiré du style **Nicolas Ghesquièr
 - Design luxe (noir/or, typo serif)
 
 ## 🚀 Démo Live
-https://TON_USERNAME.github.io/silhouette-engine-ghesquiere/
+https://NagisaSano.github.io/silhouette-engine-ghesquiere/
 
 ## 📞 Contact
 Killian Dujardin | Portfolio projet mode/tech
