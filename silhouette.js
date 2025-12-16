@@ -2,11 +2,27 @@ const TARGET_SILHOUETTES = 10;
 const MAX_ATTEMPTS = 60;
 
 const rules = {
-    shoulder: { sharp: { w: 80, h: 20 }, volume: { w: 120, h: 40 }, fluid: { w: 90, h: 25 } },
-    col: { asym: { x: 20, y: 10 }, vneck: { x: 40, y: 30 }, oversize: { x: 0, y: 0 } },
-    waist: { high: { y: 120 }, low: { y: 160 }, marked: { y: 140, curve: 15 } },
-    length: { mini: 250, midi: 380, maxi: 500 },
-    sleeve: { none: [], short: [{ x: 50, y: 120, w: 30, h: 40 }], long: [{ x: 45, y: 120, w: 25, h: 100 }] }
+    shoulder: {
+        sharp: { w: 90, h: 16 },      // épaule droite
+        volume: { w: 180, h: 50 },    // power-shoulder
+        fluid: { w: 70, h: 28 }       // tombant
+    },
+    col: {
+        asym: { x: 12, y: 8, drop: 40 },
+        vneck: { x: 0, y: 0, depth: 40 },
+        oversize: { x: -8, y: -8, expand: 24 }
+    },
+    waist: {
+        high: { y: 115 },
+        low: { y: 185 },
+        marked: { y: 145, curve: 18, belt: true }
+    },
+    length: { mini: 140, midi: 280, maxi: 440 },
+    sleeve: {
+        none: [],
+        short: [{ x: 38, y: 145, w: 36, h: 80 }],
+        long: [{ x: 32, y: 145, w: 30, h: 230 }]
+    }
 };
 
 const labelMap = {
@@ -310,54 +326,113 @@ function drawSilhouette(canvas, params, variation) {
     ctx.fillStyle = '#e8c4a0';
     ctx.fillRect(w / 2 - 10, 87, 20, 20);
 
-    const shoulder = rules.shoulder[params.shoulder];
-    const col = rules.col[params.col];
+    const shoulderRule = rules.shoulder[params.shoulder];
+    const colRule = rules.col[params.col];
+    const shoulderWidth = shoulderRule.w + (colRule.expand || 0);
+    const shoulderHeight = shoulderRule.h + (colRule.expand ? 8 : 0);
+    const topY = 108 + (colRule.y || 0);
     ctx.fillStyle = variation % 3 === 0 ? '#1a1a2e' : variation % 3 === 1 ? '#0f3460' : '#2a1a4a';
 
     ctx.beginPath();
-    ctx.moveTo(w / 2 - shoulder.w / 2 + col.x, 107 + col.y);
-    ctx.lineTo(w / 2 + shoulder.w / 2 + col.x, 107 + col.y);
-    ctx.quadraticCurveTo(w / 2 + shoulder.w / 2 + 25, 130, w / 2 + shoulder.w / 2 + 15, 145);
-    ctx.quadraticCurveTo(w / 2 - shoulder.w / 2 - 25, 130, w / 2 - shoulder.w / 2 + col.x, 145);
+    if (params.shoulder === 'sharp') {
+        ctx.moveTo(w / 2 - shoulderWidth / 2, topY);
+        ctx.lineTo(w / 2 + shoulderWidth / 2, topY);
+        ctx.lineTo(w / 2 + shoulderWidth / 2 - 10, topY + shoulderHeight);
+        ctx.lineTo(w / 2 - shoulderWidth / 2 + 10, topY + shoulderHeight);
+    } else if (params.shoulder === 'volume') {
+        ctx.moveTo(w / 2 - shoulderWidth / 2 - 10, topY);
+        ctx.lineTo(w / 2 + shoulderWidth / 2 + 10, topY);
+        ctx.quadraticCurveTo(w / 2 + shoulderWidth / 2 + 32, topY + shoulderHeight * 0.8, w / 2 + shoulderWidth / 2 + 16, topY + shoulderHeight + 18);
+        ctx.lineTo(w / 2 - shoulderWidth / 2 - 16, topY + shoulderHeight + 18);
+        ctx.quadraticCurveTo(w / 2 - shoulderWidth / 2 - 32, topY + shoulderHeight * 0.8, w / 2 - shoulderWidth / 2 - 10, topY);
+    } else {
+        ctx.moveTo(w / 2 - shoulderWidth / 2, topY);
+        ctx.quadraticCurveTo(w / 2 - shoulderWidth / 2 - 12, topY + shoulderHeight, w / 2 - shoulderWidth / 2 + 6, topY + shoulderHeight + 24);
+        ctx.quadraticCurveTo(w / 2, topY + shoulderHeight + 36, w / 2 + shoulderWidth / 2 - 6, topY + shoulderHeight + 24);
+        ctx.quadraticCurveTo(w / 2 + shoulderWidth / 2 + 12, topY + shoulderHeight, w / 2 + shoulderWidth / 2, topY);
+    }
     ctx.closePath();
     ctx.fill();
 
     const waist = rules.waist[params.waist];
+    const waistY = waist.y;
     ctx.fillStyle = '#2d1b69';
     ctx.beginPath();
-    ctx.moveTo(w / 2 - 55, 145);
-    ctx.lineTo(w / 2 + 55, 145);
-    ctx.quadraticCurveTo(w / 2 + 45, waist.y, w / 2 + 50, waist.y + 15);
-    ctx.quadraticCurveTo(w / 2 - 45, waist.y + 20, w / 2 - 55, waist.y + 10);
+    ctx.moveTo(w / 2 - 60, topY + shoulderHeight + 8);
+    ctx.lineTo(w / 2 + 60, topY + shoulderHeight + 8);
+    ctx.quadraticCurveTo(w / 2 + 55, waistY, w / 2 + 62, waistY + 18);
+    ctx.quadraticCurveTo(w / 2 - 55, waistY + 22, w / 2 - 62, waistY + 10);
     ctx.closePath();
     ctx.fill();
+
+    if (waist.belt) {
+        ctx.fillStyle = '#ffd700';
+        ctx.fillRect(w / 2 - 70, waistY - 6, 140, 12);
+    }
 
     const len = rules.length[params.length];
+    const leftDrop = params.col === 'asym' ? -35 : 0;
+    const rightLift = params.col === 'asym' ? 35 : 0;
     ctx.fillStyle = variation % 4 === 0 ? '#4a2a6a' : '#3a1a5a';
     ctx.beginPath();
-    ctx.moveTo(w / 2 - 65, waist.y);
-    ctx.lineTo(w / 2 + 65, waist.y);
-    ctx.quadraticCurveTo(w / 2 + 75 + variation * 1.5, waist.y + len * 0.6, w / 2 + 55, waist.y + len);
-    ctx.quadraticCurveTo(w / 2 - 55, waist.y + len - 20, w / 2 - 65, waist.y + len);
+    ctx.moveTo(w / 2 - 70, waistY);
+    ctx.lineTo(w / 2 + 70, waistY);
+    ctx.quadraticCurveTo(w / 2 + 85, waistY + len * 0.55 + rightLift, w / 2 + 60, waistY + len + rightLift);
+    ctx.quadraticCurveTo(w / 2 - 60, waistY + len - 25 + leftDrop, w / 2 - 70, waistY + len + leftDrop);
     ctx.closePath();
     ctx.fill();
-
-    rules.sleeve[params.sleeve].forEach(sleeve => {
-        ctx.fillStyle = '#1f1f3f';
-        ctx.beginPath();
-        ctx.moveTo(sleeve.x, 145);
-        ctx.lineTo(sleeve.x + sleeve.w, 145);
-        ctx.quadraticCurveTo(sleeve.x + sleeve.w + 10, sleeve.y + sleeve.h * 0.3, sleeve.x + sleeve.w / 2, sleeve.y + sleeve.h);
-        ctx.quadraticCurveTo(sleeve.x - 10, sleeve.y + sleeve.h * 0.3, sleeve.x, 145);
-        ctx.fill();
-    });
 
     if (params.col === 'asym') {
         ctx.fillStyle = '#ffd700';
         ctx.beginPath();
-        ctx.moveTo(w - 35, h - 120);
-        ctx.lineTo(w - 15, h - 120);
-        ctx.lineTo(w - 20, h - 60);
+        ctx.moveTo(w - 40, waistY + len * 0.5);
+        ctx.lineTo(w - 18, waistY + len * 0.5 + 45);
+        ctx.lineTo(w - 28, waistY + len * 0.5 + 90);
+        ctx.fill();
+    }
+
+    if (params.col === 'vneck') {
+        ctx.save();
+        ctx.fillStyle = '#0a0a15';
+        ctx.beginPath();
+        ctx.moveTo(w / 2 - 20, topY + 6);
+        ctx.lineTo(w / 2 + 20, topY + 6);
+        ctx.lineTo(w / 2, topY + (rules.col.vneck.depth || 40) + 12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    if (params.col === 'oversize') {
+        ctx.fillStyle = 'rgba(255,215,0,0.15)';
+        ctx.fillRect(w / 2 - shoulderWidth / 2 - 10, topY - 6, shoulderWidth + 20, shoulderHeight + 18);
+    }
+
+    if (params.sleeve !== 'none') {
+        const baseSleeve = rules.sleeve[params.sleeve][0];
+        const startY = topY + shoulderHeight * 0.6;
+        const sleeveHeight = params.sleeve === 'short'
+            ? baseSleeve.h
+            : Math.max(baseSleeve.h, len * 0.55);
+        const sleeveWidth = baseSleeve.w;
+        const colors = { short: '#22304f', long: '#16203f' };
+        const color = colors[params.sleeve] || '#1f1f3f';
+        const offset = shoulderWidth / 2 + 10;
+
+        drawSleeve(w / 2 - offset - sleeveWidth, startY, sleeveWidth, sleeveHeight, color);
+        drawSleeve(w / 2 + offset, startY, sleeveWidth, sleeveHeight, color);
+    }
+
+    function drawSleeve(x, y, sw, sh, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + sw, y);
+        ctx.quadraticCurveTo(x + sw + 8, y + sh * 0.25, x + sw * 0.5, y + sh);
+        ctx.quadraticCurveTo(x - 8, y + sh * 0.25, x, y);
         ctx.fill();
     }
 
