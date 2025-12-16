@@ -27,4 +27,4 @@ Générateur de silhouettes conceptuelles inspirées du style Nicolas Ghesquièr
 https://NagisaSano.github.io/silhouette-engine-ghesquiere/
 
 ## Contact
-Killian Dujardin | Portfolio mode/tech
+Nagisa Sano | Portfolio mode/tech
