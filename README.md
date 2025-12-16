@@ -1,30 +1,138 @@
-# Silhouette Engine | Ghesquière Inspired
+# Silhouette Engine — Générateur de silhouettes haute couture
 
-Générateur de silhouettes conceptuelles inspirées du style Nicolas Ghesquière (Louis Vuitton).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Fonctionnalités
-- 100+ combinaisons cohérentes (épaules, cols, tailles, longueurs, manches) avec règles anti-nonsense, génération forcée à 10 variantes valides.
-- Visualisation des stats (valides/rejetées/tentatives) via Chart.js.
-- Export du lookbook en PDF avec html2pdf.
-- Direction artistique luxe (noir/or, typo serif Crimson Text).
-- Dépendances CDN épinglées (Chart.js 4.4.1, html2pdf 0.10.1) avec SRI.
+Un générateur de silhouettes conceptuelles basé sur des règles de design structurées, inspiré par l'approche architecturale de **Nicolas Ghesquière**.
 
-## Démarrer
-1) Ouvrir `index.html` dans un navigateur moderne.  
-2) Choisir les paramètres (épaules, col, taille, longueur, manches).  
-3) Cliquer sur « Générer 10 variantes », puis exporter le lookbook si besoin.
+---
 
-## Lint
-- Installer les dépendances dev : `npm install`.
-- Lancer la vérification : `npm run lint`.
+## 🎯 Vision du projet
 
-## Structure
-- `index.html` : structure HTML + liens CDN (Chart.js, html2pdf).  
-- `style.css` : style luxe + responsive.  
-- `silhouette.js` : logique de génération, règles, stats et export PDF.
+Ce projet explore l'intersection entre **design systémique** et **créativité contrôlée**.
 
-## Démo
-https://NagisaSano.github.io/silhouette-engine-ghesquiere/
+Plutôt que de générer des images aléatoires par IA, le **Silhouette Engine** adopte une approche architecturale :
 
-## Contact
-Nagisa Sano | Portfolio mode/tech
+- Définir des règles esthétiques fortes (proportions, interdictions, équilibres)
+- Créer des variations cohérentes à l’intérieur de ces contraintes
+- Produire des concepts exploitables pour le prototypage et la réflexion créative
+
+**Inspiration** : la rigueur constructive de Nicolas Ghesquière, où chaque détail structurel a une fonction et un sens.
+
+---
+
+## ✨ Fonctionnalités
+
+- **5 paramètres de design** : Épaules, Col, Taille, Longueur, Manches
+- **Règles de cohérence** : combinaisons interdites pour éviter les silhouettes incohérentes
+- **Génération de 10 variantes** : une configuration, plusieurs interprétations visuelles
+- **Export PDF** : lookbook professionnel regroupant toutes les silhouettes
+- **Interface simple** : sélecteurs clairs, génération en un clic
+
+---
+
+## 🚀 Installation
+
+```bash
+git clone https://github.com/NagisaSano/silhouette-engine-ghesquiere.git
+cd silhouette-engine-ghesquiere
+```
+
+Ouvrir simplement le fichier `index.html` dans un navigateur.
+
+Aucune dépendance externe requise. Tout fonctionne en **JavaScript vanilla**.
+
+---
+
+## 🧭 Utilisation
+
+1. Choisir les paramètres via les 5 menus déroulants  
+   *(Épaules, Col, Taille, Longueur, Manches)*
+2. Cliquer sur **« Générer 10 variantes »**
+3. Visualiser le lookbook composé de 10 silhouettes cohérentes
+4. Exporter le résultat en **PDF** pour archivage ou présentation
+
+### Exemple de configuration
+
+- **Configuration** : Épaules fluides · Col asymétrique · Taille haute · Mini · Sans manches  
+- **Résultat** : 10 silhouettes aux variations marquées (coupes droites, évasées, asymétriques), tout en respectant la cohérence globale.
+
+---
+
+## 🏗️ Architecture technique
+
+### Fichiers principaux
+
+- `index.html` — Interface utilisateur
+- `silhouette.js` — Moteur de génération (règles, variations, export PDF)
+- `style.css` — Design visuel (palette sombre, mise en page)
+
+### Système de règles
+
+```js
+// Exemple de règles interdites
+const forbiddenCombos = [
+  { shoulder: 'volume', col: 'vneck', waist: 'low' }, // Trop de volume en haut
+  { shoulder: 'sharp', length: 'mini', sleeve: 'long' } // Déséquilibre des proportions
+];
+```
+
+### Variations visuelles
+
+Chaque silhouette repose sur un **seed aléatoire**, permettant de générer :
+
+- Largeurs d’épaules (±30px)
+- Hauteurs de taille (±10px)
+- Longueurs de jupe (±20px)
+- Types de coupes (droite, évasée, cintrée, asymétrique)
+- Palettes de couleurs (4 variations de dégradés)
+
+---
+
+## 🔮 Évolutions futures
+
+### Phase 2 (court terme)
+
+- [ ] Ajout de textures et matières (cuir, tech, organza)
+- [ ] Intégration de moodboards (couleurs, mots-clés conceptuels)
+- [ ] Export SVG haute qualité pour illustration
+
+### Phase 3 (moyen terme)
+
+- [ ] Module **Collections** (génération de 20–30 pièces cohérentes)
+- [ ] API de connexion à des outils 3D (CLO3D, Blender)
+- [ ] Contraintes saisonnières (volumes hiver / fluidité été)
+
+### Vision long terme
+
+- Outil de prévisualisation pour studios de design
+- Pont avec des systèmes de patronage digital
+
+---
+
+## 🤝 Contribution
+
+Les contributions sont bienvenues :
+
+1. Forker le projet
+2. Créer une branche (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Commit (`git commit -m "feat: ajout de ..."`)
+4. Push (`git push origin feature/nouvelle-fonctionnalite`)
+5. Ouvrir une Pull Request
+
+---
+
+## 📜 Licence
+
+Ce projet est sous licence **MIT**.  
+Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+---
+
+## 📬 Contact
+
+**Nagisa Sano** — Créateur du projet  
+GitHub : [@NagisaSano](https://github.com/NagisaSano)
+
+---
+
+*Projet développé pour explorer les systèmes de design génératif appliqués à la haute couture.*
