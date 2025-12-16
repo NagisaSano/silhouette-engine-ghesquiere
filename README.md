@@ -112,6 +112,8 @@ Chaque silhouette repose sur un **seed aléatoire**, permettant de générer :
 
 ### Phase 2 (court terme)
 
+**Ce projet est un prototype évolutif.** Les règles, paramètres et fonctionnalités peuvent être adaptés selon les besoins spécifiques d'un studio de création ou d'un designer.
+
 - [ ] Ajout de textures et matières (cuir, tech, organza)
 - [ ] Intégration de moodboards (couleurs, mots-clés conceptuels)
 - [ ] Export SVG haute qualité pour illustration
