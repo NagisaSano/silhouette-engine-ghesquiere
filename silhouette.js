@@ -186,8 +186,9 @@ function createStatsChart(stats) {
     canvas.setAttribute('aria-label', `Diagramme des stats: ${valid} valides, ${rejected} rejetées, ${remaining} tentatives restantes`);
     container.appendChild(canvas);
 
-    if (window.statsChart) {
-        window.statsChart.destroy();
+    const previousChart = window.statsChart ?? Chart.getChart?.(canvas);
+    if (previousChart && typeof previousChart.destroy === 'function') {
+        previousChart.destroy();
     }
 
     window.statsChart = new Chart(canvas, {
