@@ -535,54 +535,55 @@ function getStyleDescription(params) {
 
 
 function exportPDF() {
-
-    if (typeof html2pdf === 'undefined') {
-
-        alert('La librairie html2pdf nâ€™a pas pu Ãªtre chargÃ©e.');
-
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('La librairie jsPDF n’est pas disponible.');
         return;
-
     }
 
-
-
-    const element = document.getElementById('lookbook-wrapper');
-
-    if (!element || !element.querySelectorAll('canvas').length) {
-
-        alert('GÃ©nÃ©rez des silhouettes avant dâ€™exporter le lookbook.');
-
+    const canvases = Array.from(document.querySelectorAll('#lookbook-wrapper canvas'));
+    if (!canvases.length) {
+        alert('Générez des silhouettes avant d’exporter le lookbook.');
         return;
-
     }
 
+    const pdf = new window.jspdf.jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+    });
 
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    const availableWidth = pageWidth - margin * 2;
+    const availableHeight = pageHeight - margin * 2 - 10; // espace pour un titre
 
-    html2pdf()
+    canvases.forEach((canvas, idx) => {
+        const imgData = canvas.toDataURL('image/jpeg', 0.98);
+        const ratio = canvas.height / canvas.width;
 
-        .set({
+        let imgWidth = availableWidth;
+        let imgHeight = imgWidth * ratio;
 
-            margin: 10,
+        if (imgHeight > availableHeight) {
+            imgHeight = availableHeight;
+            imgWidth = imgHeight / ratio;
+        }
 
-            filename: 'Silhouette_Engine_Ghesquiere_Lookbook.pdf',
+        const x = (pageWidth - imgWidth) / 2;
+        const y = margin + 8 + (availableHeight - imgHeight) / 2;
 
-            image: { type: 'jpeg', quality: 0.98 },
+        if (idx > 0) {
+            pdf.addPage();
+        }
 
-            html2canvas: { scale: 2, useCORS: true },
+        pdf.setFontSize(14);
+        pdf.text(`Silhouette ${idx + 1}`, pageWidth / 2, margin, { align: 'center' });
+        pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight, undefined, 'FAST');
+    });
 
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-
-            pagebreak: { mode: ['css', 'legacy'] }
-
-        })
-
-        .from(element)
-
-        .save();
-
+    pdf.save('Silhouette_Engine_Ghesquiere_Lookbook.pdf');
 }
-
-
 
 // Dessin de silhouette inspirÃ© des rÃ©glages GhesquiÃ¨re
 
