@@ -405,7 +405,7 @@ function createStatsChart(stats) {
 
 
 
-    const previousChart = window.statsChart  Chart.getChart .(canvas);
+    const previousChart = window.statsChart ?? Chart.getChart?.(canvas);
 
     if (previousChart && typeof previousChart.destroy === 'function') {
 
