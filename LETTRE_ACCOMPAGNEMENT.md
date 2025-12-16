@@ -1,12 +1,12 @@
 # À l'attention de Monsieur Nicolas Ghesquière
 
-**Objet** : Présentation du projet "Silhouette Engine" – Outil conceptuel de génération de silhouettes structurées
+**Objet** : Présentation du projet "Silhouette Engine" – Prototype d'outil conceptuel de génération de silhouettes
 
 ---
 
 Monsieur Ghesquière,
 
-Je me permets de vous présenter le **Silhouette Engine**, un outil de design que j'ai développé en m'inspirant de votre approche architecturale du vêtement.
+Je me permets de vous présenter le **Silhouette Engine**, un prototype d'outil de design que j'ai développé en m'inspirant de votre approche architecturale du vêtement.
 
 ## La démarche
 
@@ -22,25 +22,30 @@ Votre travail chez Louis Vuitton m'a toujours fasciné par sa rigueur constructi
 
 J'ai voulu explorer comment **systématiser cette logique** sans perdre la diversité créative. Le résultat est un générateur qui produit 10 variations visuellement distinctes d'une même signature structurelle.
 
-## Utilisation potentielle
+## État actuel du prototype
 
-- **Pré-visualisation rapide** de concepts avant modélisation 3D
-- **Exploration de variations** autour d'une silhouette mère
-- **Outil pédagogique** pour comprendre les équilibres structurels du vêtement
+Cette première version fonctionne avec **5 paramètres de base** (épaules, col, taille, longueur, manches) et génère des silhouettes conceptuelles en 2D.
+
+**L'outil est conçu pour être évolutif** : les règles, les paramètres et le système de variations peuvent être adaptés selon vos besoins ou ceux d'un studio de création. Par exemple :
+- Ajout de matières/textures spécifiques
+- Intégration de contraintes saisonnières
+- Connexion à des outils 3D (CLO3D, Blender)
+- Personnalisation des règles esthétiques
 
 ## Ce que je cherche
 
 Je serais profondément honoré de pouvoir :
 - Recueillir vos **retours** sur cette approche
 - Échanger sur les **systèmes de design** en haute couture
-- Explorer d'éventuelles **opportunités de collaboration** ou de stage
+- Explorer comment cet outil pourrait être **adapté ou développé** pour répondre aux besoins d'un studio de création
+- Discuter d'éventuelles **opportunités de collaboration** ou de stage
 
 ---
 
 **Liens du projet :**
 
-- **GitHub** : https://github.com/NagisaSano/silhouette-engine-ghesquiere
 - **Demo en ligne** : https://nagisasano.github.io/silhouette-engine-ghesquiere/
+- **GitHub** : https://github.com/NagisaSano/silhouette-engine-ghesquiere
 - **Exemples PDF** : Disponibles dans le dossier `examples/` du repo
 
 ---
@@ -49,5 +54,5 @@ Très respectueusement,
 
 **Killian Dujardin**
 
-Email : terunori56100@gmail.com
+Email : Terunori56100@gmail.com
 GitHub : [@NagisaSano](https://github.com/NagisaSano)
