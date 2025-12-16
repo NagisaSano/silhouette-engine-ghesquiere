@@ -37,18 +37,18 @@ body::before {
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 60px 40px;
+    padding: 40px 40px 60px;
     position: relative;
     z-index: 1;
 }
 
 .page-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 h1 {
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(3.2rem, 7vw, 5.6rem);
     background: linear-gradient(135deg, #ffd700 0%, #ffed4e 30%, #ff6b35 70%, #ffd700 100%);
     background-size: 300% 300%;
     -webkit-background-clip: text;
@@ -56,7 +56,7 @@ h1 {
     background-clip: text;
     animation: gradientShift 8s ease infinite;
     text-shadow: 0 0 60px rgba(255, 215, 0, 0.5);
-    letter-spacing: -2px;
+    letter-spacing: -1px;
 }
 
 @keyframes gradientShift {
@@ -83,12 +83,13 @@ h1 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 25px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     padding: 32px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 215, 0, 0.2);
-    border-radius: 24px;
+    background: rgba(26, 18, 48, 0.75);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
 .field {
@@ -142,11 +143,16 @@ select option:checked {
 
 .controls {
     text-align: center;
-    margin: 40px 0 20px;
+    margin: 28px 0 24px;
     display: flex;
-    gap: 20px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
+    padding: 18px;
+    background: rgba(26, 18, 48, 0.75);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.28);
 }
 
 button {
@@ -176,7 +182,7 @@ button:focus-visible {
 }
 
 .canvas-wrapper {
-    margin: 30px 0 10px;
+    margin: 24px 0 10px;
 }
 
 .lookbook-title {
@@ -187,10 +193,11 @@ button:focus-visible {
 }
 
 #lookbook-wrapper {
-    background: #0d0d18;
-    padding: 16px 14px;
+    background: rgba(13, 13, 24, 0.92);
+    padding: 20px 18px;
     border-radius: 18px;
-    border: 1px solid rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
 }
 
 .canvas-container {
@@ -218,13 +225,14 @@ canvas:hover {
 }
 
 .silhouette-info {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(30px);
-    padding: 32px;
-    border-radius: 24px;
+    background: rgba(26, 18, 48, 0.78);
+    backdrop-filter: blur(26px);
+    padding: 28px;
+    border-radius: 18px;
     border: 1px solid rgba(255, 215, 0, 0.2);
-    margin-top: 28px;
+    margin-top: 24px;
     animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 16px 46px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes fadeInUp {
