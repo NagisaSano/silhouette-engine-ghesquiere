@@ -165,7 +165,8 @@ function describeVariant(params, index) {
 
 
 function labelFor(group, value) {
-    return labelMap[group] .[value]  value;
+    const map = labelMap[group];
+    return map && map[value] ? map[value] : value;
 }
 
 
@@ -526,7 +527,7 @@ function getStyleDescription(params) {
 
     };
 
-    return `${desc.shoulder[params.shoulder]} + ${desc.col[params.col]} : signature GhesquiÃ¨re.`;
+    return `${desc.shoulder[params.shoulder]} + ${desc.col[params.col]} : signature Ghesquière.`;
 
 }
 
@@ -655,11 +656,11 @@ function drawSilhouette(canvas, params, variation) {
 
     const shoulderWidth = shoulderRule.w + (colRule.expand || 0);
 
-    const shoulderHeight = shoulderRule.h + (colRule.expand  8 : 0);
+    const shoulderHeight = shoulderRule.h + (colRule.expand ? 8 : 0);
 
     const topY = 108 + (colRule.y || 0);
 
-    ctx.fillStyle = variation % 3 === 0  '#1a1a2e' : variation % 3 === 1  '#0f3460' : '#2a1a4a';
+    ctx.fillStyle = variation % 3 === 0 ? '#1a1a2e' : variation % 3 === 1 ? '#0f3460' : '#2a1a4a';
 
 
 
@@ -739,13 +740,13 @@ function drawSilhouette(canvas, params, variation) {
 
     const len = rules.length[params.length];
 
-    const asymDrop = params.col === 'asym'  (colRule.drop || 0) : 0;
+    const asymDrop = params.col === 'asym' ? (colRule.drop || 0) : 0;
 
-    const leftDrop = params.col === 'asym'  -asymDrop : 0;
+    const leftDrop = params.col === 'asym' ? -asymDrop : 0;
 
-    const rightLift = params.col === 'asym'  asymDrop : 0;
+    const rightLift = params.col === 'asym' ? asymDrop : 0;
 
-    ctx.fillStyle = variation % 4 === 0  '#4a2a6a' : '#3a1a5a';
+    ctx.fillStyle = variation % 4 === 0 ? '#4a2a6a' : '#3a1a5a';
 
     ctx.beginPath();
 
@@ -828,7 +829,7 @@ function drawSilhouette(canvas, params, variation) {
         const startY = topY + shoulderHeight * 0.6;
 
         const sleeveHeight = params.sleeve === 'short'
-             baseSleeve.h
+            ? baseSleeve.h
             : Math.max(baseSleeve.h, len * 0.55);
 
         const sleeveWidth = baseSleeve.w;
