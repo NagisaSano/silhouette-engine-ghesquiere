@@ -38,37 +38,23 @@ const forbiddenCombos = [
   { shoulder: 'fluid', waist: 'low', sleeve: 'none' }      // Fluid + low + sans manches = non
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('generateBtn').addEventListener('click', generateSilhouettes);
-  document.getElementById('exportBtn').addEventListener('click', exportPDF);
-  generateSilhouettes();
-});
 
-function getCurrentParams() {
-  return {
-    shoulder: document.getElementById('shoulder').value,
-    col: document.getElementById('col').value,
-    waist: document.getElementById('waist').value,
-    length: document.getElementById('length').value,
-    sleeve: document.getElementById('sleeve').value
-  };
-}
+function renderVariationsList(variations) {
+  if (!variations.length) {
+    return '<p>Aucune silhouette valide n'a ete generee pour ces parametres.</p>';
+  }
 
-function pickRandomKey(group) {
-  const keys = Object.keys(rules[group]);
-  return keys[Math.floor(Math.random() * keys.length)];
-}
+  const items = variations.slice(0, 3).map((v, idx) => `<li>${describeVariant(v, idx + 1)}</li>`);
+  if (variations.length > 3) {
+    items.push('<li>...</li>');
+  }
 
-function mutateParams(baseParams, attempt) {
-  const variant = { ...baseParams };
-
-  if (attempt % 3 === 0 || Math.random() > 0.6) variant.waist = pickRandomKey('waist');
-  if (attempt % 2 === 0 || Math.random() > 0.65) variant.length = pickRandomKey('length');
-  if (Math.random() > 0.75) variant.shoulder = pickRandomKey('shoulder');
-  if (Math.random() > 0.8) variant.col = pickRandomKey('col');
-  if (Math.random() > 0.8) variant.sleeve = pickRandomKey('sleeve');
-
-  return variant;
+  return `
+    <p class="info-variations-title"><strong>Variations generees :</strong></p>
+    <ul class="variation-list">
+      ${items.join('')}
+    </ul>
+  `;
 }
 
 function isValidCombo(params) {
@@ -77,13 +63,14 @@ function isValidCombo(params) {
   );
 }
 
+
 function describeVariant(params, index) {
-  return `#${index} — ${labelFor('shoulder', params.shoulder)} | ${labelFor('col', params.col)} | ${labelFor('waist', params.waist)} | ${labelFor('length', params.length)} | ${labelFor('sleeve', params.sleeve)}`;
+  return `#${index} ? ${labelFor('shoulder', params.shoulder)} | ${labelFor('col', params.col)} | ${labelFor('waist', params.waist)} | ${labelFor('length', params.length)} | ${labelFor('sleeve', params.sleeve)}`;
 }
 
 function labelFor(group, value) {
   const map = labelMap[group];
-  return map && map[value] ? map[value] : value;
+  return map && map[value] ... map[value] : value;
 }
 
 function generateSilhouettes() {
@@ -196,9 +183,10 @@ function fillWithFallbackCombos(baseParams, startIndex, container, variations, s
   return { added, tried, rejected };
 }
 
+
 function createStatsChart(stats) {
   if (typeof Chart === 'undefined') {
-    console.warn('Chart.js non chargé, stats non rendues.');
+    console.warn('Chart.js non charg..., stats non rendues.');
     return;
   }
 
@@ -210,10 +198,10 @@ function createStatsChart(stats) {
   const canvas = document.createElement('canvas');
   canvas.id = 'statsChart';
   canvas.setAttribute('role', 'img');
-  canvas.setAttribute('aria-label', `Diagramme des stats : ${valid} valides, ${rejected} rejetées, ${remaining} tentatives restantes`);
+  canvas.setAttribute('aria-label', `Diagramme des stats : ${valid} valides, ${rejected} rejetees, ${remaining} tentatives restantes`);
   container.appendChild(canvas);
 
-  const previousChart = window.statsChart ?? Chart.getChart?.(canvas);
+  const previousChart = window.statsChart ...... Chart.getChart....(canvas);
   if (previousChart && typeof previousChart.destroy === 'function') {
     previousChart.destroy();
   }
@@ -221,7 +209,7 @@ function createStatsChart(stats) {
   window.statsChart = new Chart(canvas, {
     type: 'doughnut',
     data: {
-      labels: ['Silhouettes valides', 'Combinaisons rejetées', 'Tentatives restantes'],
+      labels: ['Silhouettes valides', 'Combinaisons rejetees', 'Tentatives restantes'],
       datasets: [{
         data: [valid, rejected, remaining],
         backgroundColor: ['#ffd700', '#ff6b35', '#1a1a2e'],
@@ -234,13 +222,18 @@ function createStatsChart(stats) {
         legend: { position: 'bottom', labels: { color: '#f0f0f0', font: { family: 'serif' } } },
         title: {
           display: true,
-          text: `Analyse : ${valid}/${TARGET_SILHOUETTES} valides — ${attempts}/${MAX_ATTEMPTS} essais`,
+          text: `Analyse : ${valid}/${TARGET_SILHOUETTES} valides ... ${attempts}/${MAX_ATTEMPTS} essais`,
           color: '#ffd700',
           font: { size: 16, family: 'serif' }
         }
       }
     }
   });
+
+  const desc = document.createElement('p');
+  desc.className = 'stats-desc';
+  desc.textContent = `Statistiques : ${valid} valides, ${rejected} rejetees, ${remaining} tentatives restantes.`;
+  container.appendChild(desc);
 }
 
 function updateInfo(baseParams, variations, stats) {
@@ -248,29 +241,20 @@ function updateInfo(baseParams, variations, stats) {
   const { valid, rejected, attempts } = stats;
 
   const infoRows = [
-    `<p><strong>Épaules :</strong> ${labelFor('shoulder', baseParams.shoulder)}</p>`,
+    `<p><strong>Epaules :</strong> ${labelFor('shoulder', baseParams.shoulder)}</p>`,
     `<p><strong>Col :</strong> ${labelFor('col', baseParams.col)}</p>`,
     `<p><strong>Taille :</strong> ${labelFor('waist', baseParams.waist)}</p>`,
     `<p><strong>Longueur :</strong> ${labelFor('length', baseParams.length)}</p>`,
     `<p><strong>Manches :</strong> ${labelFor('sleeve', baseParams.sleeve)}</p>`
   ];
 
-  let variationPreview = '';
-  if (variations.length) {
-    const items = variations.slice(0, 3).map((v, idx) => `<li>${describeVariant(v, idx + 1)}</li>`);
-    if (variations.length > 3) {
-      items.push('<li>…</li>');
-    }
-    variationPreview = `<p class="info-variations-title"><strong>Variations générées :</strong></p><ul class="variation-list">${items.join('')}</ul>`;
-  } else {
-    variationPreview = '<p>Aucune silhouette valide n’a été générée pour ces paramètres.</p>';
-  }
+  const variationPreview = renderVariationsList(variations);
 
   configDetails.innerHTML = `
     <div class="info-list">
       ${infoRows.join('')}
     </div>
-    <p class="info-status"><strong>Statut :</strong> ${valid}/${TARGET_SILHOUETTES} valides — ${rejected} rejetées sur ${attempts} essais.</p>
+    <p class="info-status"><strong>Statut :</strong> ${valid}/${TARGET_SILHOUETTES} valides ... ${rejected} rejetees sur ${attempts} essais.</p>
     ${variationPreview}
     <p style="margin-top:12px;font-style:italic;">${getStyleDescription(baseParams)}</p>
   `;
@@ -336,165 +320,187 @@ function exportPDF() {
 }
 
 // Dessin de silhouette inspiré des réglages Ghesquière
+
 function drawSilhouette(canvas, params, variation) {
   const ctx = canvas.getContext('2d');
   const w = canvas.width;
   const h = canvas.height;
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, h);
-  gradient.addColorStop(0, 'rgba(10,10,20,0.95)');
-  gradient.addColorStop(0.5, 'rgba(20,15,40,0.95)');
-  gradient.addColorStop(1, 'rgba(50,20,80,0.95)');
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, w, h);
-
-  ctx.strokeStyle = 'rgba(255,215,0,0.1)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i < h; i += 40) {
-    ctx.beginPath();
-    ctx.moveTo(0, i);
-    ctx.lineTo(w, i);
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = '#f8e4d8';
-  ctx.shadowColor = '#ffd700';
-  ctx.shadowBlur = 8;
-  ctx.beginPath();
-  ctx.arc(w / 2, 55, 32, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.shadowBlur = 0;
-
-  ctx.fillStyle = '#e8c4a0';
-  ctx.fillRect(w / 2 - 10, 87, 20, 20);
-
   const shoulderRule = rules.shoulder[params.shoulder];
   const colRule = rules.col[params.col];
-  const shoulderWidth = shoulderRule.w + (colRule.expand || 0);
-  const shoulderHeight = shoulderRule.h + (colRule.expand ? 8 : 0);
-  const topY = 108 + (colRule.y || 0);
-  ctx.fillStyle = variation % 3 === 0 ? '#1a1a2e' : variation % 3 === 1 ? '#0f3460' : '#2a1a4a';
 
-  ctx.beginPath();
-  if (params.shoulder === 'sharp') {
-    ctx.moveTo(w / 2 - shoulderWidth / 2, topY);
-    ctx.lineTo(w / 2 + shoulderWidth / 2, topY);
-    ctx.lineTo(w / 2 + shoulderWidth / 2 - 10, topY + shoulderHeight);
-    ctx.lineTo(w / 2 - shoulderWidth / 2 + 10, topY + shoulderHeight);
-  } else if (params.shoulder === 'volume') {
-    ctx.moveTo(w / 2 - shoulderWidth / 2 - 10, topY);
-    ctx.lineTo(w / 2 + shoulderWidth / 2 + 10, topY);
-    ctx.quadraticCurveTo(w / 2 + shoulderWidth / 2 + 32, topY + shoulderHeight * 0.8, w / 2 + shoulderWidth / 2 + 16, topY + shoulderHeight + 18);
-    ctx.lineTo(w / 2 - shoulderWidth / 2 - 16, topY + shoulderHeight + 18);
-    ctx.quadraticCurveTo(w / 2 - shoulderWidth / 2 - 32, topY + shoulderHeight * 0.8, w / 2 - shoulderWidth / 2 - 10, topY);
-  } else {
-    ctx.moveTo(w / 2 - shoulderWidth / 2, topY);
-    ctx.quadraticCurveTo(w / 2 - shoulderWidth / 2 - 12, topY + shoulderHeight, w / 2 - shoulderWidth / 2 + 6, topY + shoulderHeight + 24);
-    ctx.quadraticCurveTo(w / 2, topY + shoulderHeight + 36, w / 2 + shoulderWidth / 2 - 6, topY + shoulderHeight + 24);
-    ctx.quadraticCurveTo(w / 2 + shoulderWidth / 2 + 12, topY + shoulderHeight, w / 2 + shoulderWidth / 2, topY);
-  }
-  ctx.closePath();
-  ctx.fill();
+  drawBackgroundAndHead();
+  const shoulderMetrics = drawShoulders(shoulderRule, colRule);
+  const { waistY, len } = drawTorsoAndSkirt(colRule, shoulderMetrics);
+  drawSleeves(shoulderMetrics, len);
+  drawFrameAndLabels();
 
-  const waist = rules.waist[params.waist];
-  const waistY = waist.y;
-  ctx.fillStyle = '#2d1b69';
-  ctx.beginPath();
-  ctx.moveTo(w / 2 - 60, topY + shoulderHeight + 8);
-  ctx.lineTo(w / 2 + 60, topY + shoulderHeight + 8);
-  ctx.quadraticCurveTo(w / 2 + 55, waistY, w / 2 + 62, waistY + 18);
-  ctx.quadraticCurveTo(w / 2 - 55, waistY + 22, w / 2 - 62, waistY + 10);
-  ctx.closePath();
-  ctx.fill();
+  function drawBackgroundAndHead() {
+    const gradient = ctx.createLinearGradient(0, 0, 0, h);
+    gradient.addColorStop(0, 'rgba(10,10,20,0.95)');
+    gradient.addColorStop(0.5, 'rgba(20,15,40,0.95)');
+    gradient.addColorStop(1, 'rgba(50,20,80,0.95)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, w, h);
 
-  if (waist.belt) {
-    ctx.fillStyle = '#ffd700';
-    ctx.fillRect(w / 2 - 70, waistY - 6, 140, 12);
-  }
+    ctx.strokeStyle = 'rgba(255,215,0,0.1)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < h; i += 40) {
+      ctx.beginPath();
+      ctx.moveTo(0, i);
+      ctx.lineTo(w, i);
+      ctx.stroke();
+    }
 
-  const len = rules.length[params.length];
-  const asymDrop = params.col === 'asym' ? (colRule.drop || 0) : 0;
-  const leftDrop = params.col === 'asym' ? -asymDrop : 0;
-  const rightLift = params.col === 'asym' ? asymDrop : 0;
-  ctx.fillStyle = variation % 4 === 0 ? '#4a2a6a' : '#3a1a5a';
-  ctx.beginPath();
-  ctx.moveTo(w / 2 - 70, waistY);
-  ctx.lineTo(w / 2 + 70, waistY);
-  ctx.quadraticCurveTo(w / 2 + 85, waistY + len * 0.55 + rightLift, w / 2 + 60, waistY + len + rightLift);
-  ctx.quadraticCurveTo(w / 2 - 60, waistY + len - 25 + leftDrop, w / 2 - 70, waistY + len + leftDrop);
-  ctx.closePath();
-  ctx.fill();
-
-  if (params.col === 'asym') {
-    ctx.fillStyle = '#ffd700';
+    ctx.fillStyle = '#f8e4d8';
+    ctx.shadowColor = '#ffd700';
+    ctx.shadowBlur = 8;
     ctx.beginPath();
-    ctx.moveTo(w - 40, waistY + len * 0.5);
-    ctx.lineTo(w - 18, waistY + len * 0.5 + 45);
-    ctx.lineTo(w - 28, waistY + len * 0.5 + 90);
+    ctx.arc(w / 2, 55, 32, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#e8c4a0';
+    ctx.fillRect(w / 2 - 10, 87, 20, 20);
   }
 
-  if (params.col === 'vneck') {
-    ctx.save();
-    ctx.fillStyle = '#0a0a15';
+  function drawShoulders(shoulder, col) {
+    const shoulderWidth = shoulder.w + (col.expand || 0);
+    const shoulderHeight = shoulder.h + (col.expand ... 8 : 0);
+    const topY = 108 + (col.y || 0);
+    ctx.fillStyle = variation % 3 === 0 ... '#1a1a2e' : variation % 3 === 1 ... '#0f3460' : '#2a1a4a';
+
     ctx.beginPath();
-    ctx.moveTo(w / 2 - 20, topY + 6);
-    ctx.lineTo(w / 2 + 20, topY + 6);
-    ctx.lineTo(w / 2, topY + (rules.col.vneck.depth || 40) + 12);
+    if (params.shoulder === 'sharp') {
+      ctx.moveTo(w / 2 - shoulderWidth / 2, topY);
+      ctx.lineTo(w / 2 + shoulderWidth / 2, topY);
+      ctx.lineTo(w / 2 + shoulderWidth / 2 - 10, topY + shoulderHeight);
+      ctx.lineTo(w / 2 - shoulderWidth / 2 + 10, topY + shoulderHeight);
+    } else if (params.shoulder === 'volume') {
+      ctx.moveTo(w / 2 - shoulderWidth / 2 - 10, topY);
+      ctx.lineTo(w / 2 + shoulderWidth / 2 + 10, topY);
+      ctx.quadraticCurveTo(w / 2 + shoulderWidth / 2 + 32, topY + shoulderHeight * 0.8, w / 2 + shoulderWidth / 2 + 16, topY + shoulderHeight + 18);
+      ctx.lineTo(w / 2 - shoulderWidth / 2 - 16, topY + shoulderHeight + 18);
+      ctx.quadraticCurveTo(w / 2 - shoulderWidth / 2 - 32, topY + shoulderHeight * 0.8, w / 2 - shoulderWidth / 2 - 10, topY);
+    } else {
+      ctx.moveTo(w / 2 - shoulderWidth / 2, topY);
+      ctx.quadraticCurveTo(w / 2 - shoulderWidth / 2 - 12, topY + shoulderHeight, w / 2 - shoulderWidth / 2 + 6, topY + shoulderHeight + 24);
+      ctx.quadraticCurveTo(w / 2, topY + shoulderHeight + 36, w / 2 + shoulderWidth / 2 - 6, topY + shoulderHeight + 24);
+      ctx.quadraticCurveTo(w / 2 + shoulderWidth / 2 + 12, topY + shoulderHeight, w / 2 + shoulderWidth / 2, topY);
+    }
     ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = '#ffd700';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.restore();
+
+    return { shoulderWidth, shoulderHeight, topY };
   }
 
-  if (params.col === 'oversize') {
-    ctx.fillStyle = 'rgba(255,215,0,0.15)';
-    ctx.fillRect(w / 2 - shoulderWidth / 2 - 10, topY - 6, shoulderWidth + 20, shoulderHeight + 18);
+  function drawTorsoAndSkirt(col, shoulderMetrics) {
+    const waist = rules.waist[params.waist];
+    const waistY = waist.y;
+    ctx.fillStyle = '#2d1b69';
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 60, shoulderMetrics.topY + shoulderMetrics.shoulderHeight + 8);
+    ctx.lineTo(w / 2 + 60, shoulderMetrics.topY + shoulderMetrics.shoulderHeight + 8);
+    ctx.quadraticCurveTo(w / 2 + 55, waistY, w / 2 + 62, waistY + 18);
+    ctx.quadraticCurveTo(w / 2 - 55, waistY + 22, w / 2 - 62, waistY + 10);
+    ctx.closePath();
+    ctx.fill();
+
+    if (waist.belt) {
+      ctx.fillStyle = '#ffd700';
+      ctx.fillRect(w / 2 - 70, waistY - 6, 140, 12);
+    }
+
+    const len = rules.length[params.length];
+    const asymDrop = params.col === 'asym' ... (col.drop || 0) : 0;
+    const leftDrop = params.col === 'asym' ... -asymDrop : 0;
+    const rightLift = params.col === 'asym' ... asymDrop : 0;
+    ctx.fillStyle = variation % 4 === 0 ... '#4a2a6a' : '#3a1a5a';
+    ctx.beginPath();
+    ctx.moveTo(w / 2 - 70, waistY);
+    ctx.lineTo(w / 2 + 70, waistY);
+    ctx.quadraticCurveTo(w / 2 + 85, waistY + len * 0.55 + rightLift, w / 2 + 60, waistY + len + rightLift);
+    ctx.quadraticCurveTo(w / 2 - 60, waistY + len - 25 + leftDrop, w / 2 - 70, waistY + len + leftDrop);
+    ctx.closePath();
+    ctx.fill();
+
+    if (params.col === 'asym') {
+      ctx.fillStyle = '#ffd700';
+      ctx.beginPath();
+      ctx.moveTo(w - 40, waistY + len * 0.5);
+      ctx.lineTo(w - 18, waistY + len * 0.5 + 45);
+      ctx.lineTo(w - 28, waistY + len * 0.5 + 90);
+      ctx.fill();
+    }
+
+    if (params.col === 'vneck') {
+      ctx.save();
+      ctx.fillStyle = '#0a0a15';
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 20, shoulderMetrics.topY + 6);
+      ctx.lineTo(w / 2 + 20, shoulderMetrics.topY + 6);
+      ctx.lineTo(w / 2, shoulderMetrics.topY + (rules.col.vneck.depth || 40) + 12);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#ffd700';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    if (params.col === 'oversize') {
+      ctx.fillStyle = 'rgba(255,215,0,0.15)';
+      ctx.fillRect(w / 2 - shoulderMetrics.shoulderWidth / 2 - 10, shoulderMetrics.topY - 6, shoulderMetrics.shoulderWidth + 20, shoulderMetrics.shoulderHeight + 18);
+    }
+
+    return { waistY, len };
   }
 
-  if (params.sleeve !== 'none') {
+  function drawSleeves(shoulderMetrics, len) {
+    if (params.sleeve === 'none') return;
+
     const baseSleeve = rules.sleeve[params.sleeve][0];
-    const startY = topY + shoulderHeight * 0.6;
+    const startY = shoulderMetrics.topY + shoulderMetrics.shoulderHeight * 0.6;
     const sleeveHeight = params.sleeve === 'short'
-      ? baseSleeve.h
+      ... baseSleeve.h
       : Math.max(baseSleeve.h, len * 0.55);
     const sleeveWidth = baseSleeve.w;
     const colors = { short: '#22304f', long: '#16203f' };
     const color = colors[params.sleeve] || '#1f1f3f';
-    const offset = shoulderWidth / 2 + 10;
+    const offset = shoulderMetrics.shoulderWidth / 2 + 10;
 
-    drawSleeve(w / 2 - offset - sleeveWidth, startY, sleeveWidth, sleeveHeight, color);
-    drawSleeve(w / 2 + offset, startY, sleeveWidth, sleeveHeight, color);
+    renderSleeve(w / 2 - offset - sleeveWidth, startY, sleeveWidth, sleeveHeight, color);
+    renderSleeve(w / 2 + offset, startY, sleeveWidth, sleeveHeight, color);
+
+    function renderSleeve(x, y, sw, sh, fillColor) {
+      ctx.fillStyle = fillColor;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + sw, y);
+      ctx.quadraticCurveTo(x + sw + 8, y + sh * 0.25, x + sw * 0.5, y + sh);
+      ctx.quadraticCurveTo(x - 8, y + sh * 0.25, x, y);
+      ctx.fill();
+    }
   }
 
-  function drawSleeve(x, y, sw, sh, color) {
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + sw, y);
-    ctx.quadraticCurveTo(x + sw + 8, y + sh * 0.25, x + sw * 0.5, y + sh);
-    ctx.quadraticCurveTo(x - 8, y + sh * 0.25, x, y);
-    ctx.fill();
+  function drawFrameAndLabels() {
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 4;
+    ctx.shadowColor = '#ffd700';
+    ctx.shadowBlur = 12;
+    ctx.strokeRect(8, 8, w - 16, h - 16);
+    ctx.shadowBlur = 0;
+
+    ctx.fillStyle = '#ffd700';
+    ctx.font = 'bold 28px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(`#${variation + 1}`, w / 2, h - 15);
+
+    ctx.fillStyle = 'rgba(255,215,0,0.8)';
+    ctx.font = '14px monospace';
+    ctx.fillText(`${params.shoulder[0].toUpperCase()}${params.col[0].toUpperCase()}`, 20, 25);
   }
-
-  ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 4;
-  ctx.shadowColor = '#ffd700';
-  ctx.shadowBlur = 12;
-  ctx.strokeRect(8, 8, w - 16, h - 16);
-  ctx.shadowBlur = 0;
-
-  ctx.fillStyle = '#ffd700';
-  ctx.font = 'bold 28px serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'bottom';
-  ctx.fillText(`#${variation + 1}`, w / 2, h - 15);
-
-  ctx.fillStyle = 'rgba(255,215,0,0.8)';
-  ctx.font = '14px monospace';
-  ctx.fillText(`${params.shoulder[0].toUpperCase()}${params.col[0].toUpperCase()}`, 20, 25);
 }
 
 console.log('Silhouette Engine prêt — règles, stats et export PDF actifs.');
