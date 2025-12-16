@@ -255,19 +255,23 @@ function updateInfo(baseParams, variations, stats) {
     `<p><strong>Manches :</strong> ${labelFor('sleeve', baseParams.sleeve)}</p>`
   ];
 
-  const variationPreview = variations.length
-    ? `Variations générées : ${variations
-        .slice(0, 3)
-        .map((v, idx) => describeVariant(v, idx + 1))
-        .join(' · ')}${variations.length > 3 ? ' …' : ''}`
-    : 'Aucune silhouette valide n’a été générée pour ces paramètres.';
+  let variationPreview = '';
+  if (variations.length) {
+    const items = variations.slice(0, 3).map((v, idx) => `<li>${describeVariant(v, idx + 1)}</li>`);
+    if (variations.length > 3) {
+      items.push('<li>…</li>');
+    }
+    variationPreview = `<p class="info-variations-title"><strong>Variations générées :</strong></p><ul class="variation-list">${items.join('')}</ul>`;
+  } else {
+    variationPreview = '<p>Aucune silhouette valide n’a été générée pour ces paramètres.</p>';
+  }
 
   configDetails.innerHTML = `
     <div class="info-list">
       ${infoRows.join('')}
     </div>
-    <p><strong>Statut :</strong> ${valid}/${TARGET_SILHOUETTES} valides — ${rejected} rejetées sur ${attempts} essais.</p>
-    <p>${variationPreview}</p>
+    <p class="info-status"><strong>Statut :</strong> ${valid}/${TARGET_SILHOUETTES} valides — ${rejected} rejetées sur ${attempts} essais.</p>
+    ${variationPreview}
     <p style="margin-top:12px;font-style:italic;">${getStyleDescription(baseParams)}</p>
   `;
 }
