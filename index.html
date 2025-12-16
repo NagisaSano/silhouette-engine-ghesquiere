@@ -7,48 +7,192 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: 'serif'; 
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%);
-            color: #f0f0f0; min-height: 100vh; 
+            font-family: 'Crimson Text', serif; 
+            background: radial-gradient(ellipse at center, #0a0a15 0%, #1a0f2e 50%, #2d1b69 100%);
+            color: #f8f4e8; 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            position: relative;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px; }
+        
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,215,0,0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,107,53,0.03) 0%, transparent 50%);
+            z-index: -1;
+            animation: shimmer 20s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        .container { 
+            max-width: 1400px; margin: 0 auto; padding: 60px 40px; 
+            position: relative; z-index: 1;
+        }
+        
         h1 { 
-            font-size: 3em; text-align: center; 
-            background: linear-gradient(45deg, #ffd700, #ff6b35); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 40px;
+            font-size: clamp(3rem, 8vw, 6rem); 
+            text-align: center; 
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 30%, #ff6b35 70%, #ffd700 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 0 60px rgba(255,215,0,0.5);
+            letter-spacing: -2px;
         }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .subtitle {
+            text-align: center; font-size: 1.4rem; 
+            color: rgba(248,244,232,0.8); 
+            margin-bottom: 60px;
+            font-style: italic;
+            max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+        
         .params { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 20px; margin-bottom: 40px; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 25px; 
+            margin-bottom: 60px; 
+            padding: 40px;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 24px;
         }
+        
         select { 
-            padding: 15px; border: 2px solid #ffd700; 
-            background: rgba(255,255,255,0.1); color: #f0f0f0; 
-            font-size: 16px; border-radius: 8px; cursor: pointer;
+            appearance: none;
+            padding: 20px 25px; 
+            border: 2px solid transparent;
+            background: rgba(255,255,255,0.08); 
+            color: #f8f4e8; 
+            font-size: 16px; 
+            font-family: 'Crimson Text', serif;
+            border-radius: 16px; 
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='rgba(255,215,0,0.8)' viewBox='0 0 20 20'%3e%3cpath d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat, repeat;
+            background-position: right .7em top 50%, 0 0;
+            background-size: .65em, 100%;
         }
+        
+        select:hover, select:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255,215,0,0.3);
+            background: rgba(255,215,0,0.1);
+            outline: none;
+        }
+        
         .canvas-container { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 20px; margin-bottom: 40px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 30px; 
+            margin-bottom: 60px;
         }
+        
         canvas { 
-            border: 2px solid #ffd700; border-radius: 12px; 
-            background: rgba(255,255,255,0.05); 
+            border: 3px solid transparent;
+            border-radius: 24px; 
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(10px);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            cursor: pointer;
         }
-        .controls { text-align: center; }
+        
+        canvas:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-image: linear-gradient(45deg, #ffd700, #ff6b35) 1;
+            box-shadow: 0 30px 80px rgba(255,215,0,0.3);
+        }
+        
+        .controls { 
+            text-align: center; 
+            margin: 60px 0;
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+        }
+        
         button { 
-            padding: 15px 30px; margin: 0 10px; 
-            background: linear-gradient(45deg, #ffd700, #ff6b35); 
-            border: none; color: #1a1a1a; font-weight: bold; 
-            border-radius: 8px; cursor: pointer; font-size: 16px;
+            padding: 20px 40px; 
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ff6b35 100%);
+            border: none; 
+            color: #1a0f2e; 
+            font-family: 'Crimson Text', serif;
+            font-weight: 600; 
+            font-size: 18px;
+            border-radius: 16px; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 15px 40px rgba(255,215,0,0.4);
+            position: relative; overflow: hidden;
         }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 60px rgba(255,215,0,0.6);
+        }
+        
+        button:active {
+            transform: translateY(-1px);
+        }
+        
         .silhouette-info { 
-            background: rgba(255,255,255,0.1); padding: 20px; 
-            border-radius: 12px; margin-top: 20px;
+            background: rgba(255,255,255,0.06); 
+            backdrop-filter: blur(30px);
+            padding: 40px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(255,215,0,0.2);
+            margin-top: 40px;
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .silhouette-info h3 {
+            color: #ffd700; font-size: 2rem; margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .silhouette-info p {
+            font-size: 1.1rem; line-height: 1.8; margin-bottom: 15px;
+            padding: 0 10px;
+        }
+        
+        #statsChart {
+            max-width: 400px; margin: 30px auto; border-radius: 16px;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            .params { grid-template-columns: 1fr; padding: 30px 20px; }
+            .controls { flex-direction: column; align-items: center; }
+            button { width: 100%; max-width: 300px; }
         }
     </style>
+
 </head>
 <body>
     <div class="container">
