@@ -58,6 +58,26 @@ Aucune dépendance externe requise. Tout fonctionne en **JavaScript vanilla**.
 
 ---
 
+## 📸 Exemples
+
+### Interface
+
+![Interface du Silhouette Engine](examples/interface_screenshot.png)
+
+### Lookbooks générés
+
+**Configuration 1** : Épaules fluides + Col asymétrique + Taille haute + Mini + Sans manches
+
+![Exemple lookbook 1](examples/example_fluide_asym_mini.pdf)  
+[📄 Télécharger le PDF](examples/example_fluide_asym_mini.pdf)
+
+**Configuration 2** : Épaules sharp + Col oversized + Taille marquée + Midi + Manches longues
+
+![Exemple lookbook 2](examples/example_sharp_oversized_midi.pdf)  
+[📄 Télécharger le PDF](examples/example_sharp_oversized_midi.pdf)
+
+> Chaque lookbook contient 10 silhouettes variées respectant strictement la configuration choisie, avec des différences visuelles marquées (proportions, coupes, détails).
+
 ## 🏗️ Architecture technique
 
 ### Fichiers principaux
