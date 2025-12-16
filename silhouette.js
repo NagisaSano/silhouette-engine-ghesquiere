@@ -489,18 +489,12 @@ function updateInfo(baseParams, variations, stats) {
     ];
 
 
-
     const variationPreview = variations.length
-
-        ? `Variations gÃ©nÃ©rÃ©es : ${variations
-
+        ? `Variations générées : ${variations
             .slice(0, 3)
-
             .map((v, idx) => describeVariant(v, idx + 1))
-
-            .join(' Â· ')}${variations.length > 3 ? ' â€¦' : ''}`
-
-        : 'Aucune silhouette valide nâ€™a Ã©tÃ© gÃ©nÃ©rÃ©e pour ces paramÃ¨tres.';
+            .join(' · ')}${variations.length > 3 ? ' …' : ''}`
+        : 'Aucune silhouette valide n’a été générée pour ces paramètres.';
 
 
 
