@@ -293,8 +293,24 @@ canvas:hover {
 }
 
 #configDetails > p:nth-of-type(2) {
-    margin-top: 2px;
+    margin-top: 10px;
     opacity: 0.95;
+}
+
+#statsContainer {
+    display: flex;
+    align-items: center;
+}
+
+#statsChart {
+    max-width: 380px;
+    margin: 8px auto 0;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.info-variations {
+    margin-top: 10px;
 }
 
 .info-list {
